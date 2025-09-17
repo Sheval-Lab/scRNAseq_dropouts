@@ -167,7 +167,7 @@ imputed_nonzero_fraction_lng <- imputed_nonzero_fraction %>%
   pivot_longer(starts_with("sample_"), values_to = "fraction") %>% 
   separate(name, into = c("sample", "method"), sep = "\\.", extra = "merge")
 
-methods2plot <- c("magic_3", "saver", "scvi", "scimpute_0.5", "knn_10", "alra")
+methods2plot <- c("magic_3", "saver", "scvi", "dca_nb", "scbig", "scimpute_0.5", "knn_10", "alra")
 
 plt_box_fraction <- function(df, method2plot = "", nrows = 1) {
   # Calculate median in original dataset to plot it as a red line
@@ -204,7 +204,9 @@ plt_box_fraction <- function(df, method2plot = "", nrows = 1) {
         "scvi" = "scVI", 
         "scimpute_0.5" = "scImpute", 
         "knn_10" = "kNN-\nsmoothing", 
-        "alra" = "ALRA"))) +
+        "alra" = "ALRA",
+        "dca_nb" = "DCA",
+        "scbig" = "scBiG"))) +
     scale_x_discrete(labels = samples_naming) +
     scale_y_continuous(breaks = seq(0, 1, by = 0.25)) +
     scale_fill_brewer(palette = "Dark2") +
@@ -246,12 +248,19 @@ boxpls_nzf[[5]] <- boxpls_nzf[[5]] +
   theme(axis.text.x = element_blank(), title = element_text(size = rel(0.7)))
 
 boxpls_nzf[[6]] <- boxpls_nzf[[6]] + 
+  theme(axis.text.x = element_blank(), title = element_text(size = rel(0.7)))
+
+boxpls_nzf[[7]] <- boxpls_nzf[[7]] + 
+  theme(axis.text.x = element_blank(), title = element_text(size = rel(0.7)))
+
+boxpls_nzf[[8]] <- boxpls_nzf[[8]] + 
   theme(title = element_text(size = rel(0.7)))
 
-wrap_plots(boxpls_nzf, nrow = 6) + plot_layout(axis_titles = "collect")
+wrap_plots(boxpls_nzf, nrow = 8) + plot_layout(axis_titles = "collect")
 
-ggsave(file.path(results_dir, "boxplot_all2.umi.png"), device = agg_png, width = 14, height = 13, units = "cm", dpi = 300, scaling = 0.7) 
-ggsave(file.path(results_dir, "boxplot_all2.umi.pdf"), width = 14, height = 13, units = "cm", scale = 1/0.7)
+ggsave(file.path(results_dir, "boxplot_all2.umi.png"), device = agg_png, width = 14, height = 16, units = "cm", dpi = 300, scaling = 0.7) 
+ggsave(file.path(results_dir, "boxplot_all2.umi.pdf"), width = 14, height = 16, units = "cm", scale = 1/0.7)
+
 
 
 # Plot medians of nonzero fractions in imputed data when imputation parameters were varied ----

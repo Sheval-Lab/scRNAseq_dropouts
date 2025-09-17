@@ -9,6 +9,8 @@ knn_script_postprocess="../0_imputation_scripts/run_kNNsmoothing_postprocess.R"
 saver_script="../0_imputation_scripts/run_SAVER.R"
 scimpute_script="../0_imputation_scripts/run_scImpute.R"
 scvi_script="../0_imputation_scripts/run_scVI.R"
+scbig_script="../0_imputation_scripts/run_scBiG.py"
+dca_script_postprocess="../0_imputation_scripts/run_DCA_postprocess.R"
 
 # Input and output directories
 data_dir="../../results/2_k562_analysis/gene_expression_filtered"
@@ -50,6 +52,14 @@ do
   
   echo "Start sample_${prop} - scVI"
   Rscript $scvi_script ${raw_counts_file} ${imputed_counts_file_prefix}.scvi.txt.gz
+  
+  echo "Start sample_${prop} - scBiG"
+  python $scbig_script ${raw_counts_file} ${imputed_counts_file_prefix}.scbig.txt.gz
+  
+  echo "Start sample_${prop} - DCA"
+  dca --threads 6 ${raw_counts_file} ${imputed_counts_file_prefix}.dca_nb_res_dir # default nb-conddisp model
+  Rscript $dca_script_postprocess $imputed_counts_file_prefix nb
+  # rm -r ${imputed_counts_file_prefix}.dca_nb_res_dir
   
   echo "End sample_${prop}"
 done

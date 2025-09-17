@@ -13,7 +13,7 @@ theme_set(
 
 results_dir <- "results/1_simulation_analysis/metrics"
 
-methods_labels <- c("MAGIC", "SAVER", "scVI", "scImpute", "kNN-smoothing", "ALRA")
+methods_labels <- c("MAGIC", "SAVER", "scVI", "DCA", "scBiG", "scImpute", "kNN-smoothing", "ALRA")
 
 
 # Load data to plot deltaNRMSE(expression level) vs observed nonzero fraction ----
@@ -41,7 +41,7 @@ plt_deltanrmse_vs_obs_nonzero_fraction <- function(dataset2plot, df_nrmse, df_no
     rename_with(~str_remove(.x, paste0(dataset2plot, "."))) %>% 
     pivot_longer(-c(GeneID, observed), names_to = "method", values_to = "imputed") %>% 
     transmute(GeneID, method, deltanrmse = observed - imputed) %>% 
-    mutate(method = factor(method, levels = c("magic_3", "saver", "scvi", "scimpute_0.5", "knn_10", "alra")))
+    mutate(method = factor(method, levels = c("magic_3", "saver", "scvi", "dca_nb", "scbig", "scimpute_0.5", "knn_10", "alra")))
   
   # Filter nonzero fraction values observed in selected dataset
   df_nonzero_fraction = df_nonzero_fraction %>% 
@@ -59,22 +59,22 @@ plt_deltanrmse_vs_obs_nonzero_fraction <- function(dataset2plot, df_nrmse, df_no
       fun = "median", bins = 100,
       color = "#f77f00", linewidth = 0.5, 
       geom = "line") +
-    facet_wrap(vars(method), labeller = as_labeller(methods_labels)) + 
+    facet_wrap(vars(method), labeller = as_labeller(methods_labels), ncol = 4) + 
     labs(
       x = "Observed nonzero fraction", 
       y = expression(ΔNRMSE == NRMSE[obs] - NRMSE[imp])) 
   
   plt
   
-  ggsave(file.path(results_dir, paste0("deltanrmse_", dataset2plot, ".png")), width = 6, height = 4, units = "cm", dpi = 300, scale = 2) 
-  ggsave(file.path(results_dir, paste0("deltanrmse_", dataset2plot, ".pdf")), width = 6, height = 4, units = "cm", scale = 2) 
+  ggsave(file.path(results_dir, paste0("deltanrmse_", dataset2plot, ".png")), width = 7, height = 4, units = "cm", dpi = 300, scale = 2) 
+  ggsave(file.path(results_dir, paste0("deltanrmse_", dataset2plot, ".pdf")), width = 7, height = 4, units = "cm", scale = 2) 
   
   # Limit Y-axis
   plt +
     coord_cartesian(ylim = c(-20, 20))
   
-  ggsave(file.path(results_dir, paste0("framed_deltanrmse_", dataset2plot, ".png")), width = 6, height = 4, units = "cm", dpi = 300, scale = 2) 
-  ggsave(file.path(results_dir, paste0("framed_deltanrmse_", dataset2plot, ".pdf")), width = 6, height = 4, units = "cm", scale = 2) 
+  ggsave(file.path(results_dir, paste0("framed_deltanrmse_", dataset2plot, ".png")), width = 7, height = 4, units = "cm", dpi = 300, scale = 2) 
+  ggsave(file.path(results_dir, paste0("framed_deltanrmse_", dataset2plot, ".pdf")), width = 7, height = 4, units = "cm", scale = 2) 
 }
 
 

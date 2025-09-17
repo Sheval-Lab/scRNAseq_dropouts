@@ -38,7 +38,7 @@ calculate_nrmse <- function(true_mtx_file, observed_mtx_file) {
     str_remove_all(paste0(str_split_i(basename(observed_mtx_file), pattern = "\\.", i = 1), "."))
   if (method == "norm") { method = "observed" }
   
-    # Read in expression matrices from files
+  # Read in expression matrices from files
   observed_mtx = read.table(observed_mtx_file, header = TRUE, row.names = 1)
   true_mtx = read.table(true_mtx_file, header = TRUE, row.names = 1)
   

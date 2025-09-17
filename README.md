@@ -68,4 +68,4 @@ The scripts used in this part of the anlysis are stored in `scripts/3_vefs_analy
 
 ## Data
 
-Synthetic scRNA-seq data generated in this study are available on Zenodo: https://doi.org/10.5281/zenodo.15546551. All other datasets used in the study are publicly available in [NCBI GEO database](https://www.ncbi.nlm.nih.gov/geo/). 
+Synthetic scRNA-seq data generated in this study are available on Zenodo: https://doi.org/10.5281/zenodo.15546550. All other datasets used in the study are publicly available in [NCBI GEO database](https://www.ncbi.nlm.nih.gov/geo/). 

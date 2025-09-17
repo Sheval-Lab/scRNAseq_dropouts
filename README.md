@@ -10,7 +10,7 @@ The repository contains the code to reproduce all analyses and figures of the pa
 
 - `scripts/functions.R` contains functions to calculate metrics: sample size (number of cells and genes), dropout rate per sample, nonzero fraction per gene (fraction of cells expressing the gene), mean normalized expression per gene, and collects this metrics across the samples to store them in a list of data frames.
 
-- `scripts/0_imputation_scripts` directory contains scripts to run scRNA-seq imputation methods ALRA (`run_ALRA.R`), kNN-smoothing (`knn_smooth.py` and `run_kNNsmoothing_postprocess.R`), MAGIC (`run_MAGIC.R`), SAVER (`run_SAVER.R`), scImpute (`run_scImpute.R`), and scVI (`run_scVI.R`).
+- `scripts/0_imputation_scripts` directory contains scripts to run scRNA-seq imputation methods ALRA (`run_ALRA.R`), DCA (`run_DCA_postprocess.R`), kNN-smoothing (`knn_smooth.py` and `run_kNNsmoothing_postprocess.R`), MAGIC (`run_MAGIC.R`), SAVER (`run_SAVER.R`), scBiG (`run_scBiG.py`), scImpute (`run_scImpute.R`), and scVI (`run_scVI.R`). DCA is executed from command line.
 
 
 ### Testing imputation algorithms on simulated scRNA-seq data
@@ -19,7 +19,7 @@ The scripts used in this part of the anlysis are stored in `scripts/1_simulation
 
 - `1_symsim_find_best_params.R` and `2_symsim_generate_datasets.R` runs [SimSym](https://doi.org/10.1038/s41467-019-10500-w) to estimate parameters for data simulation from real scRNA-seq dataset of mouse tracheal epithelial cells [(Montoro et al. 2018)](https://doi.org/10.1038/s41586-018-0393-7) and generates 3 synthetics datasets based on the populations of basal, club, and ciliated cells.
 
-- `3_zinb-wave_generate_datasets.R` runs [ZINB-WaVE](https://doi.org/10.1038/s41467-017-02554-5) to estimate parameters for data simulation from real scRNA-seq dataset of mouse tracheal epithelial cells [(Montoro et al. 2018)](https://doi.org/10.1038/s41586-018-0393-7) and generates 3 synthetics datasets based on the populations of basal, club, and ciliated cells.
+- `3_zinb-wave_generate_datasets.R` runs [ZINB-WaVE](https://doi.org/10.1038/s41467-017-02554-5) to estimate parameters for data simulation from real scRNA-seq dataset of mouse tracheal epithelial cells [(Montoro et al. 2018)](https://doi.org/10.1038/s41586-018-0393-7) and generates 3 synthetic datasets based on the populations of basal, club, and ciliated cells.
 
 - `4_preprocessing.R` performs filtering of non-expressed genes (min.cells = 3) and poor-quality cells (min.features = 200) and exports datasets as Seurat objects and text files with un-normalized and log-normalized gene expression counts. 
 
@@ -28,6 +28,10 @@ The scripts used in this part of the anlysis are stored in `scripts/1_simulation
 - `6_collect_metrics.R` performs aggregation of per-sample metrics of the fraction of cells with non-zero expression of a gene and mean normalized expression of a gene before and after scRNA-seq data imputation. It also computes NRMSE values for observed and imputed count matrices.
 
 - `7_plot_nonzero_fraction_distr.R`, `8_plot_delta_nrmse.R`, and `9_plot_nonzero_fraction_after_imputation.R` are used to make plots: distributions of nonzero fraction values in the reference and simulated datasets, scatter plots of ΔNRMSE *versus* observed nonzero fraction, and scatter plots of nonzero fraction after imputation *versus* true nonzero fraction.
+
+- `10_zero_threshold.R` explores the impact of different non-zero expression thresholds on 5 imputation methods (MAGIC, SAVER, scVI, DCA, and scBiG) performance in the recovery of non-zero fraction. 
+
+- `11_check_nb_or_zinb.R` fits ZINB-WaVE-generated data to NB and ZINB distribution to find out what model describes the synthetic data better.
 
 
 ### Testing imputation algorithms on real scRNA-seq data of K562 cells expressing dCas9-KRAB (GEO ID: [GSE204750](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE204750))
